@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion des Articles - VASB'S FASHION</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --orange: #FFA500;
+            --noir: #000000;
+            --blanc: #FFFFFF;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--blanc);
+            color: var(--noir);
+        }
+
+        header {
+            background-color: var(--orange);
+            color: var(--blanc);
+            padding: 20px;
+            text-align: center;
+        }
+
+        header img {
+            max-width: 100px;
+            height: auto;
+        }
+
+        h1 {
+            margin: 10px 0;
+            font-size: 2.5em;
+        }
+
+        h2 {
+            margin: 5px 0;
+            font-size: 1.2em;
+        }
+
+        form {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            border: 1px solid var(--orange);
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+
+        form label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+
+        form input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid var(--noir);
+            border-radius: 5px;
+        }
+
+        form button, a {
+            background-color: var(--orange);
+            color: var(--blanc);
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            width: 100%;
+            text-decoration: none;
+        }
+
+        form button:hover {
+            background-color: #e59400; /* Teinte plus foncée d'orange au survol */
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border: 1px solid var(--noir);
+        }
+
+        th {
+            background-color: var(--orange);
+            color: var(--blanc);
+        }
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 2em; /* Ajustement de la taille du titre sur mobile */
+            }
+
+            h2 {
+                font-size: 1em; /* Ajustement de la taille du sous-titre sur mobile */
+            }
+
+            form {
+                padding: 10px;
+            }
+
+            form button {
+                padding: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        {% load static %}
+        <img src="{% static 'logo.jpeg' %}" alt="Logo de VASB'S FASHION">
+        <h1>VASB'S FASHION</h1>
+        <h2>Friperie Premier choix, Arrivage chaque jour</h2>
+    </header>
+    <main>
+        <h1>Ajouter un nouvel article</h1>
+        <form method="POST">
+            {% csrf_token %}
+            <label for="mention">Mention:</label>
+            <input type="text" name="mention" id="mention">
+            
+            <label for="description">Description:</label>
+            <input type="text" name="description" id="description">
+            
+            <label for="code">Code:</label>
+            <input type="text" name="code" id="code" required>
+            
+            <label for="prix_commercial">Prix Commercial:</label>
+            <input type="number" name="prix_commercial" id="prix_commercial" step="0.01">
+            
+            <button type="submit">Ajouter l'Article</button>
+        </form>
+
+        <h2 style="margin: 25px;">Liste des Articles</h2>
+        <a href="{% url 'index' %}">Retour au Tableau de Bord</a>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Code</th>
+                    <th>Mention</th>
+                    <th>Description</th>
+                    <th>Prix Commercial</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for article in articles %}
+                    <tr>
+                        <td>{{ article.code }}</td>
+                        <td>{{ article.mention }}</td>
+                        <td>{{ article.description }}</td>
+                        <td>{{ article.prix_commercial }}-Fcfa</td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="4">Aucun article trouvé.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </main>
+</body>
+</html>

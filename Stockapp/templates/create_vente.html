@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>Enregistrer une Vente - VASB'S FASHION</title>
+    <style>
+        :root {
+            --orange: #FFA500;
+            --noir: #000000;
+            --blanc: #FFFFFF;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--blanc);
+            color: var(--noir);
+        }
+
+        header {
+            background-color: var(--orange);
+            color: var(--blanc);
+            padding: 20px;
+            text-align: center;
+        }
+
+        header img {
+            max-width: 100px;
+            height: auto;
+        }
+
+        h1 {
+            margin: 10px 0;
+            font-size: 2.5em;
+        }
+
+        h2 {
+            margin: 5px 0;
+            font-size: 1.2em;
+        }
+
+        form {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            border: 1px solid var(--orange);
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+
+        form label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+
+        form input,
+        form select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid var(--noir);
+            border-radius: 5px;
+        }
+
+        form button {
+            background-color: var(--orange);
+            color: var(--blanc);
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            width: 100%;
+        }
+
+        form button:hover {
+            background-color: #e59400; /* Teinte plus foncée d'orange au survol */
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+            max-width: 600px;
+            margin: 20px auto;
+        }
+
+        ul li {
+            color: green;
+            margin: 5px 0;
+        }
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 2em; /* Ajustement de la taille du titre sur mobile */
+            }
+
+            h2 {
+                font-size: 1em; /* Ajustement de la taille du sous-titre sur mobile */
+            }
+
+            form {
+                padding: 10px;
+            }
+
+            form button {
+                padding: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        {% load static %}
+        <img src="{% static 'logo.jpeg' %}" alt="Logo de VASB'S FASHION">
+        <h1>VASB'S FASHION</h1>
+        <h2>Friperie Premier choix, Arrivage chaque jour</h2>
+    </header>
+    <main>
+        <h1>Enregistrer</h1>
+
+        <!-- Affichage des messages de succès -->
+        {% if messages %}
+            <ul>
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        
+        <form method="POST">
+            {% csrf_token %}
+            <label for="nom_client">Le Nom Complet:</label>
+            <input type="text" name="nom_client" id="nom_client" required>
+            
+            <label for="numero_client">
+                <i class="fab fa-whatsapp"></i> Le Numéro WhatsApp:
+            </label>
+            <input type="text" name="numero_client" id="numero_client" required>
+            
+            <label for="article">Article:</label>
+            <select name="article" id="article" required>
+                {% for article in articles %}
+                    <option value="{{ article.id }}">{{ article.code }} - {{ article.mention }}</option>
+                {% endfor %}
+            </select>
+            
+            <label for="type">Type:</label>
+            <select name="type" id="type" required>
+                <option value="expedition">Expédition</option>
+                <option value="livraison">Livraison</option>
+            </select>
+
+            <label for="destination">Destination:</label>
+            <input type="text" name="destination" id="destination" required>
+            
+            <!-- Sélection du livreur -->
+            <label for="livreur">Livreur:</label>
+            <select name="livreur" id="livreur" required>
+                <option value="">Choisir un livreur</option>
+                {% for livreur in livreurs %}
+                    <option value="{{ livreur.id }}">{{ livreur.nom }} - Prix: {{ livreur.prix }}</option>
+                {% endfor %}
+            </select>
+            
+            <button type="submit">Enregistrer la Commande</button>
+        </form>
+    </main>
+</body>
+</html>

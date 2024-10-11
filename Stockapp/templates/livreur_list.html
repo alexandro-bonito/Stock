@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Ajout pour le responsive design -->
+    <title>Liste des Livreurs</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            color: #000;
+        }
+
+        header {
+            background-color: #FFA500; /* Couleur d'arrière-plan de l'en-tête */
+            color: #FFFFFF; /* Couleur du texte de l'en-tête */
+            padding: 20px;
+            text-align: center;
+        }
+
+        h1 {
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        a {
+            text-decoration: none;
+            color: #FFA500;
+            display: block;
+            text-align: center;
+            margin: 10px 0;
+        }
+
+        a:hover {
+            color: #e59400; /* Teinte plus foncée d'orange au survol */
+        }
+
+        form {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        form label {
+            display: block;
+            margin: 5px 0;
+        }
+
+        form input {
+            margin-bottom: 10px;
+            padding: 5px;
+            width: calc(100% - 20px); /* S'adapte à la largeur de l'écran */
+            max-width: 300px; /* Largeur maximale */
+        }
+
+        button {
+            background-color: #FFA500;
+            color: #FFFFFF;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 15px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #e59400; /* Teinte plus foncée d'orange au survol */
+        }
+
+        .table-container {
+            overflow-x: auto; /* Permet le défilement horizontal */
+            margin: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        table th,
+        table td {
+            border: 1px solid #FFA500;
+            padding: 10px;
+            white-space: nowrap; /* Évite le retour à la ligne dans les cellules */
+        }
+
+        table th {
+            background-color: #FFA500;
+            color: #FFFFFF;
+        }
+
+        table tbody tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        table tbody tr:hover {
+            background-color: #f1f1f1; /* Effet au survol des lignes */
+        }
+
+        /* Styles pour les écrans plus petits */
+        @media (max-width: 600px) {
+            form input {
+                width: calc(100% - 10px); /* S'adapte à la largeur de l'écran */
+            }
+
+            table th, table td {
+                padding: 8px; /* Réduit le padding pour les petits écrans */
+            }
+
+            button {
+                padding: 8px 10px; /* Réduit le padding pour les petits écrans */
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        {% load static %}
+        <img src="{% static 'logo.jpeg' %}" alt="Logo de VASB'S FASHION" style="max-width: 100px; height: auto;">
+        <h1>VASB'S FASHION</h1>
+        <h2>Friperie Premier choix, Arrivage chaque jour</h2>
+    </header>
+    <h1>Liste des Livreurs</h1>
+    <a href="{% url 'index' %}">Retour au Tableau de Bord</a>
+
+    <form method="POST">
+        {% csrf_token %}
+        <label for="nom">Nom:</label>
+        <input type="text" name="nom" id="nom" required>
+
+        <label for="prix">Prix:</label>
+        <input type="number" name="prix" id="prix" step="0.01" required>
+
+        <label for="whatsapp">Numéro WhatsApp:</label>
+        <input type="text" name="whatsapp" id="whatsapp" required>
+
+        <button type="submit">Ajouter un Livreur</button>
+    </form>
+
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Prix</th>
+                    <th>WhatsApp</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for livreur in livreurs %}
+                <tr>
+                    <td>{{ livreur.nom }}</td>
+                    <td>{{ livreur.prix }} FCFA</td>
+                    <td>{{ livreur.whatsapp }}</td>
+                    <td>
+                        <a href="{% url 'delete_livreur' livreur.id %}">
+                            <button>Supprimer</button>
+                        </a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4">Aucun livreur trouvé.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

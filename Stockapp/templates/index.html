@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tableau de Bord - VASB'S FASHION</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --orange: #FFA500;
+            --noir: #000000;
+            --blanc: #FFFFFF;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--blanc);
+            color: var(--noir);
+        }
+
+        header {
+            background-color: var(--orange);
+            color: var(--blanc);
+            padding: 20px;
+            text-align: center;
+        }
+
+        header img {
+            max-width: 100px;
+            height: auto;
+        }
+
+        h1 {
+            margin: 10px 0;
+            font-size: 2.5em;
+        }
+
+        h2 {
+            margin: 5px 0;
+            font-size: 1.2em;
+        }
+
+        .nav-links {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--noir);
+            background-color: var(--orange);
+            padding: 10px 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+            width: 80%; /* Pour les écrans mobiles */
+            text-align: center;
+        }
+
+        .nav-links a:hover {
+            background-color: #e59400; /* Teinte plus foncée d'orange au survol */
+        }
+
+        @media (min-width: 600px) {
+            .nav-links {
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .nav-links a {
+                width: auto; /* Annule la largeur fixe pour les grands écrans */
+                margin: 0 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        {% load static %}
+        <img src="{% static 'logo.jpeg' %}" alt="Logo de VASB'S FASHION">
+        <h1>VASB'S FASHION</h1>
+        <h2>Friperie Premier choix, Arrivage chaque jour</h2>
+    </header>
+    <main>
+        <h1>Tableau de Bord</h1>
+        <div class="nav-links">
+            <a href="{% url 'article_list' %}">Gérer les Articles</a>
+            <a href="{% url 'vente_list' %}">Gérer les Ventes</a>
+            <a href="{% url 'livreur_list' %}">Gérer les Livreurs</a>
+            <a href="{% url 'create_vente' %}">Enregistrer Une Vente</a>
+        </div>
+    </main>
+</body>
+</html>

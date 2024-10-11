@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>Liste des Ventes - VASB'S FASHION</title>
+    <style>
+        :root {
+            --orange: #FFA500;
+            --noir: #000000;
+            --blanc: #FFFFFF;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--blanc);
+            color: var(--noir);
+        }
+
+        header {
+            background-color: var(--orange);
+            color: var(--blanc);
+            padding: 20px;
+            text-align: center;
+        }
+
+        header img {
+            max-width: 100px;
+            height: auto;
+        }
+
+        h1 {
+            margin: 10px 0;
+            font-size: 2.5em;
+        }
+
+        h2 {
+            margin: 5px 0;
+            font-size: 1.2em;
+        }
+
+        a {
+            text-decoration: none;
+            color: var(--orange);
+        }
+
+        a:hover {
+            color: #e59400; /* Teinte plus foncée d'orange au survol */
+        }
+
+        .table-container {
+            overflow-x: auto; /* Permet le défilement horizontal */
+            margin: 20px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table th,
+        table td {
+            border: 1px solid var(--orange);
+            padding: 10px;
+            text-align: left;
+        }
+
+        table th {
+            background-color: var(--orange);
+            color: var(--blanc);
+        }
+
+        table tbody tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        table tbody tr:hover {
+            background-color: #f1f1f1; /* Effet au survol des lignes */
+        }
+
+        button {
+            background-color: var(--orange);
+            color: var(--blanc);
+            border: none;
+            border-radius: 5px;
+            padding: 5px 10px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #e59400; /* Teinte plus foncée d'orange au survol */
+        }
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 2em; /* Ajustement de la taille du titre sur mobile */
+            }
+
+            h2 {
+                font-size: 1em; /* Ajustement de la taille du sous-titre sur mobile */
+            }
+
+            table {
+                font-size: 0.9em; /* Réduction de la taille de la police pour les petits écrans */
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        {% load static %}
+        <img src="{% static 'logo.jpeg' %}" alt="Logo de VASB'S FASHION">
+        <h1>VASB'S FASHION</h1>
+        <h2>Friperie Premier choix, Arrivage chaque jour</h2>
+    </header>
+    <main>
+        <h1>Liste des Ventes</h1>
+        <a href="{% url 'index' %}">Retour au Tableau de Bord</a>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Client</th>
+                        <th>Numéro Client</th>
+                        <th>Article</th>
+                        <th>Type</th>
+                        <th>Destination</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for vente in ventes %}
+                    <tr>
+                        <td>{{ vente.nom_client }}</td>
+                        <td>{{ vente.numero_client }}</td>
+                        <td>{{ vente.article.mention }}</td>
+                        <td>{{ vente.type }}</td>
+                        <td>{{ vente.destination }}</td>
+                        <td>
+                            <!-- Lien pour contacter le client via WhatsApp -->
+                            <a href="https://wa.me/{{ vente.numero_client }}?text=Confirmez-Vous%20Votre%20Commande%20:%20{{ vente.nom_client }}%20(%20{{ vente.numero_client }}%20)%20pour%20l'article%20{{ vente.article.code }}-{{ vente.article.mention }}%20(%20{{ vente.type }}%20)%20à%20la%20destination%20{{ vente.destination }}" target="_blank">
+                                <i class="fab fa-whatsapp"></i> Contacter Le/La client(e)
+                            </a>
+                            <br>
+                            <!-- Lien pour transférer au livreur avec les informations de la vente -->
+                            {% if vente.livreur %}
+                                <a href="https://wa.me/{{ vente.livreur.whatsapp }}?text=Livrer%20ou%20expedier%20la%20vente%20de%20{{ vente.nom_client }}%20(%20{{ vente.numero_client }}%20)%20pour%20l'article%20{{ vente.article.code }}-{{ vente.article.mention }}%20(%20{{ vente.type }}%20)%20à%20la%20destination%20{{ vente.destination }}" target="_blank">
+                                    <i class="fab fa-whatsapp"></i> à Convoyer par {{ vente.livreur.nom }}
+                                </a>
+                            {% else %}
+                                <span>Aucun livreur assigné</span>
+                            {% endif %}
+                            <br>
+                            <!-- Supprimer -->
+                            <a href="{% url 'delete_vente' vente.id %}">
+                                <button>Supprimer</button>
+                            </a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6">Aucune vente trouvée.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </main>
+</body>
+</html>
